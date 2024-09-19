@@ -16,11 +16,12 @@
 class Graph {
 private:
     int num_vertices;                     // Number of vertices in the graph
-    std::vector<std::list<int>> adj;      // Adjacency list representation
+    std::vector<std::multiset<int>> adj;  // Adjacency list for each vertex
     
 public:
     // Constructor to init a graph with the given number of vertices (no edges yet)
     Graph(int num_vertices);
+    ~Graph();
 
     // Add an undirected edge between vertices u and v
     void addEdge(int u, int v);
@@ -39,6 +40,9 @@ public:
 
     // Print the Euler circuit or indicate if it doesn't exist
     void printEulerCircuit(const std::vector<int>& circuit);
+
+    // Show the graph in a GUI using python script
+    void show();
 
 private:
     // Helper DFS function to visit all vertices connected to v

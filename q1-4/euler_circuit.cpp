@@ -2,109 +2,28 @@
 
 Graph::Graph(int num_vertices) : num_vertices(num_vertices), adj(num_vertices) {}   // adj is a vector of num_vertices lists
 
+Graph::~Graph() {
+    adj.clear();
+}
+
 void Graph::addEdge(int u, int v) {
-    adj[u].push_back(v);
-    adj[v].push_back(u);
+    adj[u].insert(v);
+    adj[v].insert(u);
 }
 
 void Graph::generateRandomEdges(int num_edges, unsigned int seed) {
     srand(seed);
-    std::set<std::pair<int, int>> edge_set;
-
-    // make sure the num of edges is not too large (negative is already checked in main)
-    int max_edges = num_vertices * (num_vertices - 1) / 2;
-    if (num_edges > max_edges) {
-        std::cerr << "Too many edges for the number of vertices." << std::endl;
-        exit(1);
-    }
-
-    // Start by connecting all vertices into a cycle (to ensure basic connectivity)
-    std::cout << "Generating cycle to ensure connectivity:\n";
-    for (int i = 0; i < num_vertices; ++i) {
-        int u = i;
-        int v = (i + 1) % num_vertices;  // Connect in a cycle
-        edge_set.insert(std::make_pair(std::min(u, v), std::max(u, v)));
-        addEdge(u, v);
-        std::cout << "Added edge: " << u << " -> " << v << "\n";
-    }
-
-    // Add remaining edges randomly
-    std::cout << "\nAdding random edges to reach " << num_edges << " edges:\n";
-    while ((int)edge_set.size() < num_edges) {
+    
+    int edge_count = 0;
+    while (edge_count < num_edges) {
         int u = rand() % num_vertices;
         int v = rand() % num_vertices;
-        if (u == v) continue;  // Avoid self-loops
-        int a = std::min(u, v);
-        int b = std::max(u, v);
-        if (edge_set.count(std::make_pair(a, b)) == 0) {
-            edge_set.insert(std::make_pair(a, b));
+
+        // Ensure no self-loop and no duplicate edge
+        if (u != v && std::find(adj[u].begin(), adj[u].end(), v) == adj[u].end()) {
             addEdge(u, v);
-            std::cout << "Added edge: " << u << " -> " << v << "\n";
+            edge_count++;
         }
-    }
-
-    // Print degrees of all vertices
-    std::cout << "\nDegrees of vertices after edge generation:\n";
-    for (int i = 0; i < num_vertices; ++i) {
-        std::cout << "Vertex " << i << ": Degree " << adj[i].size() << "\n";
-    }
-
-    // Fix vertices with odd degrees (Euler circuit requires all vertices to have even degrees)
-    std::vector<int> odd_degree_vertices;
-    for (int i = 0; i < num_vertices; ++i) {
-        if (adj[i].size() % 2 != 0) {
-            odd_degree_vertices.push_back(i);
-        }
-    }
-
-    // If there are odd-degree vertices, print debug info
-    if (!odd_degree_vertices.empty()) {
-        std::cout << "\nOdd-degree vertices found: ";
-        for (int v : odd_degree_vertices) {
-            std::cout << v << " ";
-        }
-        std::cout << std::endl;
-    }
-
-    // If there are odd-degree vertices, we pair them up to ensure even degree
-    std::cout << "\nAttempting to fix odd-degree vertices:\n";
-    while (odd_degree_vertices.size() >= 2) {
-        bool edge_added = false;
-        for (size_t i = 0; i < odd_degree_vertices.size(); ++i) {
-            for (size_t j = i + 1; j < odd_degree_vertices.size(); ++j) {
-                int u = odd_degree_vertices[i];
-                int v = odd_degree_vertices[j];
-                
-                // Ensure that the edge does not already exist
-                int a = std::min(u, v);
-                int b = std::max(u, v);
-                if (edge_set.count(std::make_pair(a, b)) == 0) {
-                    edge_set.insert(std::make_pair(a, b));
-                    addEdge(u, v);
-                    std::cout << "Added edge to fix odd degree: " << u << " -> " << v << "\n";
-
-                    // Remove the vertices that are now even-degree
-                    odd_degree_vertices.erase(odd_degree_vertices.begin() + j);
-                    odd_degree_vertices.erase(odd_degree_vertices.begin() + i);
-                    edge_added = true;
-                    break;
-                }
-            }
-            if (edge_added) break;
-        }
-        if (!edge_added) {
-            std::cerr << "Error: Unable to connect any odd-degree vertices without duplicating edges." << std::endl;
-            break;
-        }
-    }
-
-    // Final check: if there are still odd-degree vertices, we have an issue
-    if (!odd_degree_vertices.empty()) {
-        std::cerr << "Error: Unable to fix all odd-degree vertices. Odd-degree vertices left: ";
-        for (int v : odd_degree_vertices) {
-            std::cerr << v << " ";
-        }
-        std::cerr << std::endl;
     }
 }
 
@@ -169,6 +88,8 @@ std::vector<int> Graph::findEulerCircuit() {
     if (!hasEulerCircuit())
         return circuit;
 
+    std::cout << "Euler circuit exists." << std::endl;
+
     // Create a copy of adjacency lists to modify during the algorithm
     std::vector<std::multiset<int>> adj_copy(num_vertices);
     for (int i = 0; i < num_vertices; ++i) {
@@ -222,4 +143,23 @@ void Graph::printEulerCircuit(const std::vector<int>& circuit) {
         }
     }
     std::cout << std::endl;
+}
+
+# include <fstream>
+
+void Graph::show(){
+    // export the graph to txt and run python file in another thread to show it
+    std::ofstream out("graph.txt");
+    out << num_vertices << std::endl;
+    for (int i = 0; i < num_vertices; ++i) {
+        for (int v : adj[i]) {
+            out << i << " " << v << std::endl;
+        }
+    }
+    out.close();
+
+    system("python3 show_graph.py"); 
+
+    // remove the file after showing
+    remove("graph.txt");
 }
