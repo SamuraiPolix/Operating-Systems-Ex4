@@ -1,0 +1,14 @@
+==97556== Callgrind, a call-graph generating cache profiler
+==97556== Copyright (C) 2002-2017, and GNU GPL'd, by Josef Weidendorfer et al.
+==97556== Using Valgrind-3.18.1 and LibVEX; rerun with -h for copyright info
+==97556== Command: ./euler_circuit -n 100000 -e 300000 -s 1
+==97556== 
+==97556== For interactive control, run 'callgrind_control -h'.
+==97556== brk segment overflow in thread #1: can't grow to 0x485b000
+==97556== (see section Limitations in user manual)
+==97556== NOTE: further instances of this message will not be shown
+==97556== 
+==97556== Events    : Ir
+==97556== Collected : 1400057297
+==97556== 
+==97556== I   refs:      1,400,057,297
