@@ -1,0 +1,162 @@
+        -:    0:Source:euler_circuit.cpp
+        -:    1:#include "euler_circuit.hpp"
+        -:    2:
+       12:    3:Graph::Graph(int num_vertices) : num_vertices(num_vertices), adj(num_vertices) {}   // adj is a vector of num_vertices lists
+        -:    4:
+      338:    5:void Graph::addEdge(int u, int v) {
+      338:    6:    adj[u].insert(v);
+      338:    7:    adj[v].insert(u);
+      338:    8:}
+        -:    9:
+        2:   10:void Graph::generateRandomEdges(int num_edges, unsigned int seed) {
+        2:   11:    srand(seed);
+        -:   12:    
+        2:   13:    int edge_count = 0;
+      311:   14:    while (edge_count < num_edges) {
+      309:   15:        int u = rand() % num_vertices;
+      309:   16:        int v = rand() % num_vertices;
+        -:   17:
+        -:   18:        // Ensure no self-loop and no duplicate edge
+      309:   19:        if (u != v && std::find(adj[u].begin(), adj[u].end(), v) == adj[u].end()) {
+      300:   20:            addEdge(u, v);
+      300:   21:            edge_count++;
+        -:   22:        }
+        -:   23:    }
+        2:   24:}
+        -:   25:
+        -:   26:// DFS - Search utility function to check connectivity
+      136:   27:void Graph::DFS(int v, std::vector<bool>& visited) {
+      136:   28:    visited[v] = true;
+      808:   29:    for (int u : adj[v]) {
+      672:   30:        if (!visited[u]) {
+      127:   31:            DFS(u, visited);
+        -:   32:        }
+        -:   33:    }
+      136:   34:}
+        -:   35:
+        -:   36:// Function to check if the graph is connected, uses DFS
+       12:   37:bool Graph::isConnected() {
+       12:   38:    std::vector<bool> visited(num_vertices, false);
+        -:   39:
+        -:   40:    // Find a vertex with non-zero degree
+       12:   41:    int non_zero_degree_vertex = -1;
+      122:   42:    for (int i = 0; i < num_vertices; ++i) {
+      119:   43:        if (!adj[i].empty()) {
+        9:   44:            non_zero_degree_vertex = i;
+        9:   45:            break;
+        -:   46:        }
+        -:   47:    }
+        -:   48:
+        -:   49:    // If there are no edges, the graph is considered connected
+       12:   50:    if (non_zero_degree_vertex == -1)
+        3:   51:        return true;
+        -:   52:
+        -:   53:    // Start DFS from a vertex with non-zero degree
+        9:   54:    DFS(non_zero_degree_vertex, visited);
+        -:   55:
+        -:   56:    // Check if all non-zero degree vertices are visited
+      145:   57:    for (int i = 0; i < num_vertices; ++i) {
+      138:   58:        if (!adj[i].empty() && !visited[i]) {
+        2:   59:            return false;
+        -:   60:        }
+        -:   61:    }
+        -:   62:
+        7:   63:    return true;
+       12:   64:}
+        -:   65:
+        -:   66:// Function to check if the graph has an Euler circuit
+       12:   67:bool Graph::hasEulerCircuit() {
+       12:   68:    if (!isConnected())
+        2:   69:        return false;
+        -:   70:
+        -:   71:    // Check if all vertices have even degree
+      137:   72:    for (int i = 0; i < num_vertices; ++i) {
+      132:   73:        if (adj[i].size() % 2 != 0)
+        5:   74:            return false;
+        -:   75:    }
+        -:   76:
+        5:   77:    return true;
+        -:   78:}
+        -:   79:
+        -:   80:// Function to find and return the Euler circuit using Hierholzer's algorithm
+       12:   81:std::vector<int> Graph::findEulerCircuit() {
+       12:   82:    std::vector<int> circuit;
+        -:   83:
+       12:   84:    if (!hasEulerCircuit())
+        7:   85:        return circuit;
+        -:   86:
+        5:   87:    std::cout << "Euler circuit exists." << std::endl;
+        -:   88:
+        -:   89:    // Create a copy of adjacency lists to modify during the algorithm
+        5:   90:    std::vector<std::multiset<int>> adj_copy(num_vertices);
+      125:   91:    for (int i = 0; i < num_vertices; ++i) {
+      140:   92:        for (int v : adj[i]) {
+       20:   93:            adj_copy[i].insert(v);
+        -:   94:        }
+        -:   95:    }
+        -:   96:
+        -:   97:    // Start from a vertex with non-zero degree
+        5:   98:    int curr_v = 0;
+      115:   99:    for (int i = 0; i < num_vertices; ++i) {
+      112:  100:        if (!adj[i].empty()) {
+        2:  101:            curr_v = i;
+        2:  102:            break;
+        -:  103:        }
+        -:  104:    }
+        -:  105:
+        5:  106:    std::stack<int> curr_path;
+        5:  107:    curr_path.push(curr_v);
+        -:  108:
+       30:  109:    while (!curr_path.empty()) {
+       25:  110:        if (!adj_copy[curr_v].empty()) {
+       10:  111:            curr_path.push(curr_v);
+       10:  112:            int next_v = *adj_copy[curr_v].begin();
+        -:  113:            // Remove the edge between curr_v and next_v
+       10:  114:            adj_copy[curr_v].erase(adj_copy[curr_v].find(next_v));
+       10:  115:            adj_copy[next_v].erase(adj_copy[next_v].find(curr_v));
+       10:  116:            curr_v = next_v;
+        -:  117:        } else {
+       15:  118:            circuit.push_back(curr_v);
+       15:  119:            curr_v = curr_path.top();
+       15:  120:            curr_path.pop();
+        -:  121:        }
+        -:  122:    }
+        -:  123:
+        5:  124:    return circuit;
+        5:  125:}
+        -:  126:
+        -:  127:// Function to print the Euler circuit
+       12:  128:void Graph::printEulerCircuit(const std::vector<int>& circuit) {
+       12:  129:    if (circuit.empty()) {
+        7:  130:        std::cout << "Euler circuit does not exist in the graph." << std::endl;
+        7:  131:        return;
+        -:  132:    }
+        -:  133:
+        5:  134:    std::cout << "Euler circuit exists. The circuit is:" << std::endl;
+       20:  135:    for (auto it = circuit.rbegin(); it != circuit.rend(); ++it) {
+       15:  136:        std::cout << *it;
+       15:  137:        if (it + 1 != circuit.rend()) {
+       10:  138:            std::cout << " -> ";
+        -:  139:        }
+        -:  140:    }
+        5:  141:    std::cout << std::endl;
+        -:  142:}
+        -:  143:
+        -:  144:# include <fstream>
+        -:  145:
+        2:  146:void Graph::show(){
+        -:  147:    // export the graph to txt and run python file in another thread to show it
+        2:  148:    std::ofstream out("graph.txt");
+        2:  149:    out << num_vertices << std::endl;
+      202:  150:    for (int i = 0; i < num_vertices; ++i) {
+      800:  151:        for (int v : adj[i]) {
+      600:  152:            out << i << " " << v << std::endl;
+        -:  153:        }
+        -:  154:    }
+        2:  155:    out.close();
+        -:  156:
+        2:  157:    system("python3 show_graph.py"); 
+        -:  158:
+        -:  159:    // remove the file after showing
+        2:  160:    remove("graph.txt");
+        2:  161:}

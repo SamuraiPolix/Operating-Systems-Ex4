@@ -1,0 +1,113 @@
+File 'main.cpp'
+Lines executed:87.32% of 71
+Creating 'main.cpp.gcov'
+
+File '/usr/include/c++/11/iostream'
+No executable lines
+Removing 'iostream.gcov'
+
+File '/usr/include/c++/11/ext/aligned_buffer.h'
+Lines executed:100.00% of 8
+Creating 'aligned_buffer.h.gcov'
+
+File '/usr/include/c++/11/ext/new_allocator.h'
+Lines executed:84.21% of 19
+Creating 'new_allocator.h.gcov'
+
+File '/usr/include/c++/11/bits/alloc_traits.h'
+Lines executed:100.00% of 15
+Creating 'alloc_traits.h.gcov'
+
+File '/usr/include/c++/11/bits/stl_tree.h'
+Lines executed:100.00% of 143
+Creating 'stl_tree.h.gcov'
+
+File '/usr/include/c++/11/bits/allocator.h'
+Lines executed:100.00% of 5
+Creating 'allocator.h.gcov'
+
+File '/usr/include/c++/11/bits/stl_construct.h'
+Lines executed:100.00% of 14
+Creating 'stl_construct.h.gcov'
+
+File '/usr/include/c++/11/bits/stl_multiset.h'
+Lines executed:100.00% of 16
+Creating 'stl_multiset.h.gcov'
+
+File '/usr/include/c++/11/bits/move.h'
+Lines executed:100.00% of 4
+Creating 'move.h.gcov'
+
+File '/usr/include/c++/11/bits/stl_vector.h'
+Lines executed:97.73% of 88
+Creating 'stl_vector.h.gcov'
+
+File 'euler_circuit.hpp'
+No executable lines
+Removing 'euler_circuit.hpp.gcov'
+
+File 'euler_circuit.cpp'
+Lines executed:100.00% of 91
+Creating 'euler_circuit.cpp.gcov'
+
+File '/usr/include/c++/11/bits/stl_algobase.h'
+Lines executed:33.33% of 48
+Creating 'stl_algobase.h.gcov'
+
+File '/usr/include/c++/11/bits/cpp_type_traits.h'
+Lines executed:0.00% of 2
+Creating 'cpp_type_traits.h.gcov'
+
+File '/usr/include/c++/11/bits/stl_uninitialized.h'
+Lines executed:100.00% of 18
+Creating 'stl_uninitialized.h.gcov'
+
+File '/usr/include/c++/11/bits/deque.tcc'
+Lines executed:0.00% of 42
+Creating 'deque.tcc.gcov'
+
+File '/usr/include/c++/11/bits/stl_deque.h'
+Lines executed:78.10% of 137
+Creating 'stl_deque.h.gcov'
+
+File '/usr/include/c++/11/bits/stl_bvector.h'
+Lines executed:95.24% of 84
+Creating 'stl_bvector.h.gcov'
+
+File '/usr/include/c++/11/bits/predefined_ops.h'
+Lines executed:100.00% of 7
+Creating 'predefined_ops.h.gcov'
+
+File '/usr/include/c++/11/bits/stl_pair.h'
+Lines executed:100.00% of 2
+Creating 'stl_pair.h.gcov'
+
+File '/usr/include/c++/11/bits/stl_iterator.h'
+Lines executed:100.00% of 30
+Creating 'stl_iterator.h.gcov'
+
+File '/usr/include/c++/11/bits/stl_function.h'
+Lines executed:100.00% of 4
+Creating 'stl_function.h.gcov'
+
+File '/usr/include/c++/11/bits/stl_iterator_base_types.h'
+Lines executed:100.00% of 2
+Creating 'stl_iterator_base_types.h.gcov'
+
+File '/usr/include/c++/11/bits/vector.tcc'
+Lines executed:100.00% of 21
+Creating 'vector.tcc.gcov'
+
+File '/usr/include/c++/11/bits/stl_stack.h'
+Lines executed:100.00% of 11
+Creating 'stl_stack.h.gcov'
+
+File '/usr/include/c++/11/bits/stl_algo.h'
+Lines executed:100.00% of 3
+Creating 'stl_algo.h.gcov'
+
+File '/usr/include/c++/11/new'
+Lines executed:100.00% of 2
+Creating 'new.gcov'
+
+Lines executed:86.02% of 887
