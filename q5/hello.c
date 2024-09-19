@@ -10,7 +10,7 @@
 #include <string.h>
 
 int main(int argc, char *argv[]) {
-    char *string, *string_so_far;
+    char *string, *string_so_far;       // = NULL           // fix
     int i, length;     length = 0;
     for(i=0; i<argc; i++) {
         length += strlen(argv[i])+1;
@@ -25,5 +25,6 @@ int main(int argc, char *argv[]) {
         string_so_far = string;
     }
     printf("You entered: %s\n", string_so_far);
+    // free(string_so_far);         // fix
     return (0);
 }
